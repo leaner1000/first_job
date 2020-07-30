@@ -5,7 +5,7 @@
             <tr>
                 <td>货号:</td>
                 <td>
-                    <input class="easyui-textbox" type="text" name="cloth_id" id="cloth_id1" data-options="required:true"/>
+                    <input class="easyui-textbox" type="text" name="cloth_id" id="cloth_id" data-options="required:true"/>
                 </td>
             </tr>
             <tr>
@@ -74,6 +74,12 @@
                     <input class="easyui-textbox" type="text" name="others" id="others1"/>
                 </td>
             </tr>
+            <tr>
+                <td>默认价格:</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="default_price" id="default_price"/>
+                </td>
+            </tr>
         </table>
     </form>
     <div style="padding:5px">
@@ -86,10 +92,15 @@
         setTimeout(bindclothaddenterevent, 10)
     })
     function bindclothaddenterevent(){
-        for(i=0;i<$("#clothAddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").length;i++){
-            $($("#clothAddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")).keydown(function(e){
+        var input_list=$("#clothAddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")
+        for(i=0;i<input_list.length;i++){
+            $(input_list).keydown(function(e){
                     if(e.which==13){
-                        $($("#clothAddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")[$("#cloth1AddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").index(e.target)+1]).focus()
+                        $(input_list[input_list.index(e.target)+1]).focus()
+                    }
+                    if(e.which==106){
+                        $(input_list[input_list.index(e.target)-1]).focus()
+                        return false;
                     }
                 }
             )
@@ -103,7 +114,7 @@
         }
         //使用FormData上传图片及表单
         var formdata=new FormData()
-        formdata.append("cloth_id",$("#cloth_id1").val())
+        formdata.append("cloth_id",$("#cloth_id").val())
         formdata.append('picture_path',$('#picture_path1')[0].files[0])
         formdata.append("des",$("#des1").val())
         formdata.append("s",$("#s1").val())

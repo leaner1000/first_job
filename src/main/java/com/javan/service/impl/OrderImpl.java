@@ -36,6 +36,19 @@ public class OrderImpl implements OrderService {
     }
 
     @Override
+    public EUDataGridResult getByCustomer_name(String custom_name){
+        //查询客户列表
+        OrderExample example = new OrderExample();
+        example.createCriteria().andCustomer_nameEqualTo(custom_name);
+        List<Order> list = fm.selectByExample(example);
+        //创建一个返回值对象
+        EUDataGridResult result = new EUDataGridResult();
+        result.setRows(list);
+        result.setTotal(list.size());
+        return result;
+    }
+
+    @Override
     public Order getByid(int id){
         return fm.selectByPrimaryKey(id);
     }

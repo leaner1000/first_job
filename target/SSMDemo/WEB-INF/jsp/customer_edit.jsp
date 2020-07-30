@@ -23,6 +23,8 @@
                     <input class="easyui-textbox" type="text" name="address" style="width: 280px;"/>
                 </td>
             </tr>
+            <input type="hidden" name="unused1">
+            <input type="hidden" name="unused2">
         </table>
     </form>
     <div style="padding:5px">
@@ -34,11 +36,15 @@
         setTimeout(bindcustomereditenterevent, 10)
     })
     function bindcustomereditenterevent(){
-        console.log(456)
-        for(i=0;i<$("#customerEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").length;i++){
-            $($("#customerEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")).keydown(function(e){
+        var input_list=$("#clothEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")
+        for(i=0;i<input_list.length;i++){
+            $(input_list).keydown(function(e){
                     if(e.which==13){
-                        $($("#customerEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")[$("#customerEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").index(e.target)+1]).focus()
+                        $(input_list[input_list.index(e.target)+1]).focus()
+                    }
+                    if(e.which==106){
+                        $(input_list[input_list.index(e.target)-1]).focus()
+                        return false;
                     }
                 }
             )
@@ -50,7 +56,10 @@
             return ;
         }
         console.log($("#customerEditForm").serialize())
-        $.post("customer/update",$("#customerEditForm").serialize(), function(data){
+        $.post({
+            url:"customer/update",
+            data:JSON.stringify($("#customerEditForm").serializeObject()),
+            success: function(data){
             if(data.status == 200){
                 $.messager.alert('提示','修改成功!','info',function(){
                     $("#customerEditWindow").window('close');
@@ -59,6 +68,7 @@
             }else{
                 $.messager.alert('提示', data.msg);
             }
-        }, "json");
+        },
+            contentType: "application/json"});
     }
 </script>

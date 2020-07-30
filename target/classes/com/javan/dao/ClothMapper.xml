@@ -14,6 +14,9 @@
     <result column="xl4" property="xl4" jdbcType="INTEGER" />
     <result column="xl5" property="xl5" jdbcType="INTEGER" />
     <result column="others" property="others" jdbcType="INTEGER" />
+    <result column="default_price" property="default_price" jdbcType="DECIMAL" />
+    <result column="unused1" property="unused1" jdbcType="VARCHAR" />
+    <result column="unused2" property="unused2" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -74,7 +77,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    cloth_id, picture_path, des, s, m, l, xl, xl2, xl3, xl4, xl5, others
+    cloth_id, picture_path, des, s, m, l, xl, xl2, xl3, xl4, xl5, others, default_price, 
+    unused1, unused2
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.javan.entity.ClothExample" >
     select
@@ -110,11 +114,13 @@
     insert into clothinfo (cloth_id, picture_path, des, 
       s, m, l, xl, 
       xl2, xl3, xl4, xl5, 
-      others)
+      others, default_price, unused1, 
+      unused2)
     values (#{cloth_id,jdbcType=INTEGER}, #{picture_path,jdbcType=VARCHAR}, #{des,jdbcType=VARCHAR}, 
       #{s,jdbcType=INTEGER}, #{m,jdbcType=INTEGER}, #{l,jdbcType=INTEGER}, #{xl,jdbcType=INTEGER}, 
       #{xl2,jdbcType=INTEGER}, #{xl3,jdbcType=INTEGER}, #{xl4,jdbcType=INTEGER}, #{xl5,jdbcType=INTEGER}, 
-      #{others,jdbcType=INTEGER})
+      #{others,jdbcType=INTEGER}, #{default_price,jdbcType=DECIMAL}, #{unused1,jdbcType=VARCHAR}, 
+      #{unused2,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.javan.entity.Cloth" >
     insert into clothinfo
@@ -155,6 +161,15 @@
       <if test="others != null" >
         others,
       </if>
+      <if test="default_price != null" >
+        default_price,
+      </if>
+      <if test="unused1 != null" >
+        unused1,
+      </if>
+      <if test="unused2 != null" >
+        unused2,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="cloth_id != null" >
@@ -192,6 +207,15 @@
       </if>
       <if test="others != null" >
         #{others,jdbcType=INTEGER},
+      </if>
+      <if test="default_price != null" >
+        #{default_price,jdbcType=DECIMAL},
+      </if>
+      <if test="unused1 != null" >
+        #{unused1,jdbcType=VARCHAR},
+      </if>
+      <if test="unused2 != null" >
+        #{unused2,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -240,6 +264,15 @@
       <if test="record.others != null" >
         others = #{record.others,jdbcType=INTEGER},
       </if>
+      <if test="record.default_price != null" >
+        default_price = #{record.default_price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.unused1 != null" >
+        unused1 = #{record.unused1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unused2 != null" >
+        unused2 = #{record.unused2,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -258,7 +291,10 @@
       xl3 = #{record.xl3,jdbcType=INTEGER},
       xl4 = #{record.xl4,jdbcType=INTEGER},
       xl5 = #{record.xl5,jdbcType=INTEGER},
-      others = #{record.others,jdbcType=INTEGER}
+      others = #{record.others,jdbcType=INTEGER},
+      default_price = #{record.default_price,jdbcType=DECIMAL},
+      unused1 = #{record.unused1,jdbcType=VARCHAR},
+      unused2 = #{record.unused2,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -299,6 +335,15 @@
       <if test="others != null" >
         others = #{others,jdbcType=INTEGER},
       </if>
+      <if test="default_price != null" >
+        default_price = #{default_price,jdbcType=DECIMAL},
+      </if>
+      <if test="unused1 != null" >
+        unused1 = #{unused1,jdbcType=VARCHAR},
+      </if>
+      <if test="unused2 != null" >
+        unused2 = #{unused2,jdbcType=VARCHAR},
+      </if>
     </set>
     where cloth_id = #{cloth_id,jdbcType=INTEGER}
   </update>
@@ -314,7 +359,14 @@
       xl3 = #{xl3,jdbcType=INTEGER},
       xl4 = #{xl4,jdbcType=INTEGER},
       xl5 = #{xl5,jdbcType=INTEGER},
-      others = #{others,jdbcType=INTEGER}
+      others = #{others,jdbcType=INTEGER},
+      default_price = #{default_price,jdbcType=DECIMAL},
+      unused1 = #{unused1,jdbcType=VARCHAR},
+      unused2 = #{unused2,jdbcType=VARCHAR}
     where cloth_id = #{cloth_id,jdbcType=INTEGER}
   </update>
+  <select id="autoComplete" parameterType="java.lang.String" resultType="com.javan.entity.Cloth">
+    select * from clothinfo
+    where cloth_id like #{id,jdbcType=VARCHAR}"%"
+  </select>
 </mapper>

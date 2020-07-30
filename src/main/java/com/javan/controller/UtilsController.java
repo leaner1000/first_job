@@ -33,6 +33,11 @@ class UtilsController {
     @Autowired
     private CancelItemMapper cim;
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String t() {
+        return "discard";
+    }
+
     @RequestMapping(value = "/sellcondition", method = RequestMethod.GET)
     public String test() {
         return "sellcondition";
@@ -64,14 +69,14 @@ class UtilsController {
 
     @ResponseBody
     @RequestMapping(value = "/statistics", method = {RequestMethod.GET,RequestMethod.POST})
-    public List<Statistics> A(@RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+    public List<Statistics> A(@RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,        //统计指定顾客在某时间段内的衣服购买数据
                               @RequestParam("endTime")@DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime,
                               @RequestParam("customer_name")String customer_name)  {
-        String customer_order=null;
+        String customer_order="";
         ArrayList<Statistics> l=new ArrayList<Statistics>();
         Integer amout=0;
         Float total=0f;
-        if(customer_order!=null&&customer_name.length()!=0){
+        if(customer_name!=null&&customer_name.length()!=0){                                //获取对应顾客单号
             OrderExample oe=new OrderExample();
             oe.createCriteria().andCustomer_nameEqualTo(customer_name).andStatusEqualTo("complete");
             List<Order> lo=om.selectByExample(oe);
@@ -83,7 +88,7 @@ class UtilsController {
                 customer_order += lo.get(lo.size() - 1).getItem_id();
             }
         }
-        if(customer_order==null||customer_order.length()!=0){
+        if(!(customer_name!=null&&customer_name.length()!=0)||customer_order.length()>0){                           // 统计订单数据 只在已输入用户名且用户不存在订单的情况下不执行
             List<Integer> a=oim.showCloth(startTime,endTime,customer_order);
             Integer tmp=0;
             Float tmp1=0f;
@@ -171,7 +176,7 @@ class UtilsController {
                 l.add(s);
             }
         }
-        customer_order=null;
+        customer_order="";
         if(customer_name!=null&&customer_name.length()!=0){
             CancelExample ce=new CancelExample();
             ce.createCriteria().andCustomer_nameEqualTo(customer_name).andStatusEqualTo("complete");
@@ -184,7 +189,7 @@ class UtilsController {
                 customer_order += lo.get(lo.size() - 1).getItem_id();
             }
         }
-        if(customer_order==null||customer_order.length()!=0){
+        if(!(customer_name!=null&&customer_name.length()!=0)||customer_order.length()>0){                          //// 统计退单数据
             List<Integer> b=cim.showCloth(startTime,endTime,customer_order);
             for(int i:b){
                 Integer tmp=0;
@@ -284,7 +289,7 @@ class UtilsController {
 
     @RequestMapping(value="/clothcount",method = RequestMethod.POST)
     @ResponseBody
-    public Statistics statistics(@Param("cloth_id") Integer cloth_id, @RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,
+    public Statistics statistics(@Param("cloth_id") Integer cloth_id, @RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd")Date startTime,    // 统计某衣服在指定时间内的销量
                                  @RequestParam("endTime")@DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime){
         Statistics s=new Statistics();
         Float tmp,tmp1;
@@ -317,10 +322,10 @@ class UtilsController {
         m.put("year", ""+(ca.get(Calendar.YEAR)-2000));
         m.put("month",""+(ca.get(Calendar.MONTH)+1));
         m.put("day",""+ca.get(Calendar.DAY_OF_MONTH));
-        m.put("mail_fee",o.getDes());
+        m.put("mail_fee",o.getDes());                                 //填入订单基本信息
+
         int tmp1=1;
         Float f=0f;
-
         List<OrderItem> l=new ArrayList<OrderItem>();
         Set<Integer> indexset=new HashSet<Integer>();
         for(String i:s){
@@ -342,10 +347,16 @@ class UtilsController {
             m.put("total"+tmp1,""+(Float.parseFloat(m.get("total"+tmp1)==null?"0":m.get("total"+tmp1))+oi.getTotal()));
             m.put("num"+tmp1,""+(Integer.parseInt(m.get("num"+tmp1)==null?"0":m.get("num"+tmp1))+oi.getNum()));
             m.put("des"+tmp1,oi.getDes());
-            f+=oi.getTotal();
+            f+=oi.getTotal();                                           //填入订单详细信息并计算总金额
         }
+        Float.parseFloat("0");
+        int a=o.getDes().length();
+        m.put("mail_fee",""+(o.getDes().length()==0?0f:Float.parseFloat(o.getDes())));
+        f+=o.getDes().length()==0?0f:Float.parseFloat(o.getDes());
         PdfUtils.addToMap(m,f);
-        m.put("total_num",""+f);
+
+        m.put("total_num",""+f);           //填入总金额
+
         try {
             String url="/home/123.pdf";                                          //String url="/home/123.pdf"; "C:\\Users\\Administrator\\Desktop\\123.pdf";(url,"C:\\Users\\Administrator\\Desktop\\simhei.ttf",m);
             ByteArrayOutputStream byteArrayOutputStream=PdfUtils.generatePdfStream(url,"/home/simhei.ttf",m);                                        //( url,"/home/simhei.ttf",m);
@@ -356,7 +367,7 @@ class UtilsController {
             OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
             toClient.write(byteArrayOutputStream.toByteArray());
             toClient.flush();
-            toClient.close();
+            toClient.close();                              //生成并返回pdf文件
         } catch (IOException ex) {
             ex.printStackTrace();
         }

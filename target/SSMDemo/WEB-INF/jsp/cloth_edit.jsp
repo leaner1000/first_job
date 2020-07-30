@@ -71,6 +71,12 @@
                     <input class="easyui-textbox" type="text" name="others" id="others"/>
                 </td>
             </tr>
+            <tr>
+                <td>默认价格:</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="default_price" id="default_price"/>
+                </td>
+            </tr>
         </table>
     </form>
     <div style="padding:5px">
@@ -82,11 +88,15 @@
         setTimeout(bindclotheditenterevent, 10)
     })
     function bindclotheditenterevent(){
-        console.log(456)
-        for(i=0;i<$("#clothEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").length;i++){
-            $($("#clothEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")).keydown(function(e){
+        var input_list=$("#clothEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")
+        for(i=0;i<input_list.length;i++){
+            $(input_list).keydown(function(e){
                     if(e.which==13){
-                        $($("#clothEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")[$("#clothEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").index(e.target)+1]).focus()
+                        $(input_list[input_list.index(e.target)+1]).focus()
+                    }
+                    if(e.which==106){
+                        $(input_list[input_list.index(e.target)-1]).focus()
+                        return false;
                     }
                 }
             )
@@ -106,6 +116,7 @@
         formdata.append("xl4",$("#xl4").val())
         formdata.append("xl5",$("#xl5").val())
         formdata.append("others",$("#others").val())
+        formdata.append("default_price",$("#default_price").val())
         $.ajax({
             type:"POST",
             url:"cloth/update",

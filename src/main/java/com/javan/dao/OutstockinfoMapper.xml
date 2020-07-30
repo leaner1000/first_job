@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.javan.dao.ClothMapper" >
-  <resultMap id="BaseResultMap" type="com.javan.entity.Cloth" >
-    <id column="cloth_id" property="cloth_id" jdbcType="INTEGER" />
+<mapper namespace="com.javan.dao.OutstockinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.javan.entity.Outstockinfo" >
+    <id column="out_stock_id" property="out_stock_id" jdbcType="INTEGER" />
+    <result column="cloth_id" property="cloth_id" jdbcType="INTEGER" />
     <result column="picture_path" property="picture_path" jdbcType="VARCHAR" />
     <result column="des" property="des" jdbcType="VARCHAR" />
     <result column="s" property="s" jdbcType="INTEGER" />
@@ -74,15 +75,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    cloth_id, picture_path, des, s, m, l, xl, xl2, xl3, xl4, xl5, others
+    out_stock_id, cloth_id, picture_path, des, s, m, l, xl, xl2, xl3, xl4, xl5, others
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.javan.entity.ClothExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.javan.entity.OutstockinfoExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from clothinfo
+    from outstockinfo
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -93,32 +94,35 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from clothinfo
-    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+    from outstockinfo
+    where out_stock_id = #{out_stock_id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from clothinfo
-    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+    delete from outstockinfo
+    where out_stock_id = #{out_stock_id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.javan.entity.ClothExample" >
-    delete from clothinfo
+  <delete id="deleteByExample" parameterType="com.javan.entity.OutstockinfoExample" >
+    delete from outstockinfo
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.javan.entity.Cloth" >
-    insert into clothinfo (cloth_id, picture_path, des, 
-      s, m, l, xl, 
-      xl2, xl3, xl4, xl5, 
-      others)
-    values (#{cloth_id,jdbcType=INTEGER}, #{picture_path,jdbcType=VARCHAR}, #{des,jdbcType=VARCHAR}, 
-      #{s,jdbcType=INTEGER}, #{m,jdbcType=INTEGER}, #{l,jdbcType=INTEGER}, #{xl,jdbcType=INTEGER}, 
-      #{xl2,jdbcType=INTEGER}, #{xl3,jdbcType=INTEGER}, #{xl4,jdbcType=INTEGER}, #{xl5,jdbcType=INTEGER}, 
-      #{others,jdbcType=INTEGER})
+  <insert id="insert" parameterType="com.javan.entity.Outstockinfo" >
+    insert into outstockinfo (out_stock_id, cloth_id, picture_path, 
+      des, s, m, l, 
+      xl, xl2, xl3, xl4, 
+      xl5, others)
+    values (#{out_stock_id,jdbcType=INTEGER}, #{cloth_id,jdbcType=INTEGER}, #{picture_path,jdbcType=VARCHAR}, 
+      #{des,jdbcType=VARCHAR}, #{s,jdbcType=INTEGER}, #{m,jdbcType=INTEGER}, #{l,jdbcType=INTEGER}, 
+      #{xl,jdbcType=INTEGER}, #{xl2,jdbcType=INTEGER}, #{xl3,jdbcType=INTEGER}, #{xl4,jdbcType=INTEGER}, 
+      #{xl5,jdbcType=INTEGER}, #{others,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.javan.entity.Cloth" >
-    insert into clothinfo
+  <insert id="insertSelective" parameterType="com.javan.entity.Outstockinfo" >
+    insert into outstockinfo
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="out_stock_id != null" >
+        out_stock_id,
+      </if>
       <if test="cloth_id != null" >
         cloth_id,
       </if>
@@ -157,6 +161,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="out_stock_id != null" >
+        #{out_stock_id,jdbcType=INTEGER},
+      </if>
       <if test="cloth_id != null" >
         #{cloth_id,jdbcType=INTEGER},
       </if>
@@ -195,15 +202,18 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.javan.entity.ClothExample" resultType="java.lang.Integer" >
-    select count(*) from clothinfo
+  <select id="countByExample" parameterType="com.javan.entity.OutstockinfoExample" resultType="java.lang.Integer" >
+    select count(*) from outstockinfo
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update clothinfo
+    update outstockinfo
     <set >
+      <if test="record.out_stock_id != null" >
+        out_stock_id = #{record.out_stock_id,jdbcType=INTEGER},
+      </if>
       <if test="record.cloth_id != null" >
         cloth_id = #{record.cloth_id,jdbcType=INTEGER},
       </if>
@@ -246,8 +256,9 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update clothinfo
-    set cloth_id = #{record.cloth_id,jdbcType=INTEGER},
+    update outstockinfo
+    set out_stock_id = #{record.out_stock_id,jdbcType=INTEGER},
+      cloth_id = #{record.cloth_id,jdbcType=INTEGER},
       picture_path = #{record.picture_path,jdbcType=VARCHAR},
       des = #{record.des,jdbcType=VARCHAR},
       s = #{record.s,jdbcType=INTEGER},
@@ -263,9 +274,12 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.javan.entity.Cloth" >
-    update clothinfo
+  <update id="updateByPrimaryKeySelective" parameterType="com.javan.entity.Outstockinfo" >
+    update outstockinfo
     <set >
+      <if test="cloth_id != null" >
+        cloth_id = #{cloth_id,jdbcType=INTEGER},
+      </if>
       <if test="picture_path != null" >
         picture_path = #{picture_path,jdbcType=VARCHAR},
       </if>
@@ -300,11 +314,12 @@
         others = #{others,jdbcType=INTEGER},
       </if>
     </set>
-    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+    where out_stock_id = #{out_stock_id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.javan.entity.Cloth" >
-    update clothinfo
-    set picture_path = #{picture_path,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.javan.entity.Outstockinfo" >
+    update outstockinfo
+    set cloth_id = #{cloth_id,jdbcType=INTEGER},
+      picture_path = #{picture_path,jdbcType=VARCHAR},
       des = #{des,jdbcType=VARCHAR},
       s = #{s,jdbcType=INTEGER},
       m = #{m,jdbcType=INTEGER},
@@ -315,6 +330,6 @@
       xl4 = #{xl4,jdbcType=INTEGER},
       xl5 = #{xl5,jdbcType=INTEGER},
       others = #{others,jdbcType=INTEGER}
-    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+    where out_stock_id = #{out_stock_id,jdbcType=INTEGER}
   </update>
 </mapper>

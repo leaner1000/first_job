@@ -1,6 +1,7 @@
 package com.javan.controller;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.javan.dao.CustomerMapper;
 import com.javan.dao.OrderItemMapper;
 import com.javan.dao.OrderMapper;
 import com.javan.entity.*;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class OrderController {
@@ -26,6 +28,8 @@ public class OrderController {
     private OrderItemMapper oim;
     @Autowired
     private OrderMapper om;
+    @Autowired
+    private CustomerMapper cm;
 
     @RequestMapping(value = "/order/page",method = RequestMethod.POST)
     @ResponseBody
@@ -43,7 +47,30 @@ public class OrderController {
     @ResponseBody
     public Status insertOrder(Order f)  {
         Status s=new Status();
+        Float total=0f;
         om.insertSelective(f);
+
+        if(f.getCustomer_name().length()!=0){                         //改变用户应付款
+            CustomerExample ce=new CustomerExample();
+            ce.createCriteria().andCustomer_nameEqualTo(f.getCustomer_name());
+            List<Customer> lc=cm.selectByExample(ce);
+            String tmp=f.getItem_id();
+            String[] l=tmp.split(",");
+            if(l.length>0){                                         //统计应付总金额
+                for(String j:l){
+                    OrderItem oi=oim.selectByPrimaryKey(Integer.parseInt(j));
+                    total+=oi.getTotal();
+                }
+            }
+            for(Customer c:lc){                             //改变应付款，减去总计金额
+                c.setUnused1(c.getUnused1()-total.intValue());
+                if(f.getDes()!=null&&!f.getDes().equals("")){
+                    c.setUnused1(c.getUnused1()-Integer.parseInt(f.getDes()));
+                }
+                cm.updateByPrimaryKeySelective(c);
+            }
+        }
+
         s.setstatus(200);
         return s;
     }
@@ -55,6 +82,9 @@ public class OrderController {
         Status s=new Status();
         StringBuilder sb=new StringBuilder();
         for(int i=0;i<f.length;i++){
+            if(f[i].getSingle()==null){
+                f[i].setSingle(0f);
+            }
             oim.insertSelective(f[i]);
             if (i == 0) {
                 sb.append(f[i].getOrder_id());
@@ -73,16 +103,37 @@ public class OrderController {
     public Status delete(Integer[] ids){
         Order o=new Order();
         Order o1;
-        OrderItem oi=new OrderItem();
-        for(Integer i:ids){
+        Float total=0f;
+        List<Customer> lc=null;
+        OrderItem oi;
+        for(Integer i:ids){                                  //改变用户应付款
+            total=0f;
             o1=om.selectByPrimaryKey(i);
+            if(o1.getCustomer_name().length()!=0){
+                CustomerExample ce=new CustomerExample();
+                ce.createCriteria().andCustomer_nameEqualTo(o1.getCustomer_name());
+                lc=cm.selectByExample(ce);
+            }
             String tmp=o1.getItem_id();
-            String[] s=tmp.split(",");
-            if(s.length>0){
-                for(String j:s){
-                    oi.setOrder_id(Integer.parseInt(j));
-                    oi.setStatus("cancel");
-                    oim.updateByPrimaryKeySelective(oi);
+            if(tmp.length()>0){
+                String[] s=tmp.split(",");
+                if(s.length>0){
+                    for(String j:s){                    //统计总金额
+                        oi=oim.selectByPrimaryKey(Integer.parseInt(j));
+                        total+=oi.getTotal();
+                        oi.setStatus("cancel");
+                        oim.updateByPrimaryKeySelective(oi);
+                    }
+                }
+            }
+            if(lc!=null){
+                for(Customer c:lc){
+
+                    c.setUnused1(c.getUnused1()+total.intValue());
+                    if(o1.getDes()!=null&&!o1.getDes().equals("")){                    //运费
+                        c.setUnused1(c.getUnused1()+Integer.parseInt(o1.getDes()));
+                    }
+                    cm.updateByPrimaryKeySelective(c);
                 }
             }
             o.setOrder_id(i);
@@ -92,6 +143,15 @@ public class OrderController {
         Status s=new Status();
         s.setstatus(200);
         return s;
+    }
+
+    @RequestMapping(value="/custom_name",method = RequestMethod.GET)
+    @ResponseBody
+    public EUDataGridResult custom_order(@RequestParam("customer_name") String custom_name){
+        EUDataGridResult res=fs.getByCustomer_name(custom_name);
+        Status status=new Status();
+        status.setstatus(200);
+        return res;
     }
 
     @RequestMapping(value="/orderitem/{id}",method = RequestMethod.POST)
@@ -108,6 +168,7 @@ public class OrderController {
         status.setstatus(200);
         return orderItems;
     }
+
 
     @RequestMapping(value="/order/add",method = RequestMethod.GET)
     public String add(){

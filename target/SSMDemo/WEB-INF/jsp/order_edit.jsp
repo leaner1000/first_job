@@ -54,11 +54,15 @@
 </div>
 <script>
     function bindorderenterevent(){
-        console.log(456)
-        for(i=0;i<$("#orderEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").length;i++){
-            $($("#orderEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")).keydown(function(e){
+        var input_list=$("#orderEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")
+        for(i=0;i<input_list.length;i++){
+            $(input_list).keydown(function(e){
                     if(e.which==13){
-                        $($("#orderEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")[$("#orderEditForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").index(e.target)+1]).focus()
+                        $(input_list[input_list.index(e.target)+1]).focus()
+                    }
+                    if(e.which==106){
+                        $(input_list[input_list.index(e.target)-1]).focus()
+                        return false;
                     }
                 }
             )
@@ -113,6 +117,9 @@
             ]],
             onSelect:function (rowIndex, rowData) {
                 $("#orderitemeditList").datagrid('beginEdit',rowIndex);
+                bindorderenterevent();
+            },
+            onLoadSuccess:function () {
                 bindorderenterevent();
             }
         });

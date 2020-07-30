@@ -55,7 +55,7 @@
 	<!-- 比如图片 js,css文件等静态资源 -->
 	<mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
 	<mvc:resources mapping="/img/**" location="/WEB-INF/img/" />
-
+	<mvc:resources mapping="/audio/**" location="/WEB-INF/audio/" />
 	<!-- 校验器 -->
 	<bean id="validator"
 		  class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">

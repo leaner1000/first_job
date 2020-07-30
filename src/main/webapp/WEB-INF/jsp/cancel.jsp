@@ -2,7 +2,7 @@
 
 <table class="easyui-datagrid" id="cancelList" title="列表"
        singleSelect="false" collapsible="true" pagination="true" rownumbers="true"
-       url="/cancel/page" method="post" pageSize="10" fitColumns="true" toolbar="#toolbarcancel">
+       url="/cancel/page" method="post" pageSize="50" fitColumns="true" toolbar="#toolbarcancel">
     <thead>
     <tr>
         <th checkbox="true" field="ck"></th>

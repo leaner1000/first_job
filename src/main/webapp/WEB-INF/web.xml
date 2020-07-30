@@ -44,7 +44,7 @@
     <load-on-startup>1</load-on-startup>
     <async-supported>true</async-supported>
     <multipart-config>
-      <location>D:\</location>
+      <location>/home/img</location>
       <max-file-size>200000</max-file-size>
     </multipart-config>
   </servlet>

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartException;
 
+import java.io.IOException;
+
 @ControllerAdvice
 public class ExceptionHandlerController{
     @ExceptionHandler({UnauthorizedException.class})
@@ -36,12 +38,22 @@ public class ExceptionHandlerController{
         s.setMsg("上传失败");
         return s;
     }
+    @ExceptionHandler({IOException.class})
+    @ResponseBody
+    public Status IOExceptionHandler(IOException e){
+        Status s=new Status();
+        s.setstatus(400);
+        s.setMsg("上传失败");
+        return s;
+    }
     @ExceptionHandler({Exception.class})
     @ResponseBody
     public Status ExceptionHandler(Exception e){
         Status s=new Status();
         s.setstatus(400);
-        s.setMsg("未知错误"+e.getClass().toString());
+        s.setMsg("未知错误"+e.getClass().toString()+"请检查信息是否填写完善");
         return s;
     }
+
+
 }

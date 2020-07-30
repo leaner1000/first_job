@@ -2,7 +2,7 @@
 
 <table class="easyui-datagrid" id="userList" title="用户列表"
        singleSelect="false" collapsible="true" pagination="true" rownumbers="true"
-       url="/user/page" method="post" pageSize="10" fitColumns="true" toolbar="#toolbar10">
+       url="/user/page" method="post" pageSize="50" fitColumns="true" toolbar="#toolbar10">
     <thead>
     <tr>
         <th checkbox="true" field="ck"></th>
@@ -64,6 +64,8 @@
         switch (val){
             case 1:
                 return '系统管理员'
+            case 2:
+                return '店员'
         }
     }
 

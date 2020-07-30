@@ -1,7 +1,7 @@
 package com.javan.service;
 
-import com.javan.entity.EUDataGridResult;
 import com.javan.entity.Cloth;
+import com.javan.entity.EUDataGridResult;
 
 public interface ClothService {
     public EUDataGridResult getPage(int page_num,int pagesize);

@@ -1,20 +1,16 @@
 package com.javan.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.javan.dao.CancelItemMapper;
 import com.javan.dao.CancelMapper;
 import com.javan.entity.*;
 import com.javan.service.CancelItemService;
 import com.javan.service.CancelService;
-import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 @Controller
 public class CancelController {
@@ -49,7 +45,7 @@ public class CancelController {
         return s;
     }
 
-    @RequestMapping(value="/cancelitem/insert",method = RequestMethod.POST)
+    @RequestMapping(value="/cancelitem/insert",method = RequestMethod.POST)     //取消订单中条目
     @ResponseBody
     @RequiresPermissions({"cancel:add"})
     public Status insertItem(@RequestBody CancelItem[] f)  {
@@ -119,5 +115,4 @@ public class CancelController {
     public String cancel(){
         return "cancel";
     }
-
 }

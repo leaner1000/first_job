@@ -10,6 +10,7 @@
     <script type="text/javascript" src="/js/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="/js/datagrid-detailview.js"></script>
     <script type="text/javascript" src="/js/locale/easyui-lang-zh_CN.js"></script>
+    <script src="js/recorder.js"></script>
 </head>
 <body class="easyui-layout">
 <div class="divNorth" style="height:100px;" data-options="region:'north'" >
@@ -21,6 +22,7 @@
             <ul id="store" class="easyui-tree">
                 <li data-options="attributes:{'url':'/cloth'}">商品管理</li>
                 <li data-options="attributes:{'url':'/order'}">订单管理</li>
+                <li data-options="attributes:{'url':'/outstock'}">缺货管理</li>
                 <li data-options="attributes:{'url':'/cancel'}">退货管理</li>
                 <li data-options="attributes:{'url':'/customer'}">客户管理</li>
 
@@ -67,8 +69,40 @@
 </div>
 </body>
 <script>
-
+    function formataudio(val,row){
+        if (val != null&&val!=''){
+            return '<audio src="' + val + '"'+'controls="true"'+'>图片</audio>'
+        }
+    }
+    function formatpic(val,row) {
+        if (val != null&&val!=''){
+            return '<a href="' + val + '"'+'target="_blank"'+'>图片</a>'
+        }
+    }
+    function formatred(val,row) {
+        console.log(val)
+        if (val != null&&val!=''){
+            if(parseInt(val)>30){
+                return '<p style="color:#F00">'+val+'</p>'
+            } else{
+                return '<p>'+val+'</p>'
+            }
+        }
+    }
     function getCookie(cname) { var name = cname + "="; var ca = document.cookie.split(';'); for(var i=0; i<ca.length; i++) { var c = ca[i].trim(); if (c.indexOf(name)==0) return c.substring(name.length,c.length); } return ""; }
+    $.prototype.serializeObject = function () {
+        var a,o,h,i,e;
+        a = this.serializeArray();
+        o={};
+        h=o.hasOwnProperty;
+        for(i=0;i<a.length;i++){
+            e=a[i];
+            if(!h.call(o,e.name)){
+                o[e.name]=e.value;
+            }
+        }
+        return o;
+    }
 
     $(function () {
         $("#LoginWindow").dialog({
@@ -140,11 +174,7 @@
     function login(){
         $('#LoginWindow').window("open");
     }
-    function formatpic(val,row) {
-        if (val != null&&val!=''){
-            return '<a href="' + val + '">图片</a>'
-        }
-    }
+
     $(function() {
         $('#store').tree({
             onClick:function(node) {

@@ -1,32 +1,30 @@
 package com.javan.controller;
 
-import com.javan.entity.EUDataGridResult;
-import com.javan.entity.Cloth;
-import com.javan.entity.Status;
+import com.javan.dao.ClothMapper;
+import com.javan.dao.SpecialPriceMapper;
+import com.javan.entity.*;
 import com.javan.service.ClothService;
-import com.javan.service.OrderItemService;
-import com.sun.deploy.net.HttpResponse;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 
 @Controller
 public class ClothController {
         @Autowired
         private ClothService fs;
+        @Autowired
+        private ClothMapper cm;
+        @Autowired
+        private SpecialPriceMapper spm;
 
 
         @RequestMapping(value = "/cloth/page",method = RequestMethod.POST)
@@ -41,10 +39,37 @@ public class ClothController {
             return fs.getByid(id);
         }
 
+        @RequestMapping(value = "/cloth/autocomplete",method = RequestMethod.GET)
+        @ResponseBody
+        public List<?> autoCompleteCloth(@Param("q") String q){
+                if(q==null||q.length()==0){
+                        return fs.getPage(1,100).getRows();
+                }
+                return cm.autoComplete(q);
+        }
+
+        @RequestMapping(value = "/cloth/default_price",method = RequestMethod.POST)
+        @ResponseBody
+        public Status getDefaultPrice(@Param("cloth_id")int cloth_id,@Param("customer_name")String custom_name){
+            SpecialPriceKey spk = new SpecialPriceKey();
+            spk.setCloth_id(cloth_id);
+            spk.setCustom_id(custom_name);
+            SpecialPrice sp = spm.selectByPrimaryKey(spk);
+            Status s=new Status();
+            if(sp==null){
+                s.setstatus(500);
+                s.setMsg("没有特殊价");
+                return s;
+            }
+            s.setstatus(200);
+            s.setMsg(sp.getDefault_price().toString());
+            return s;
+        }
+
         @RequestMapping(value="/cloth/insert",method = RequestMethod.POST)
         @ResponseBody
         @RequiresPermissions({"cloth:add"})
-        public Status insert(@RequestPart("picture_path") Part picture,Cloth f,BindingResult bindingResult,HttpServletRequest request)  {
+        public Status insert(@RequestPart("picture_path") Part picture, Cloth f, BindingResult bindingResult, HttpServletRequest request)  {
                 Status s=new Status();
                 f.setPicture_path(""+System.currentTimeMillis()+".jpg");
                 String upload_path=request.getSession().getServletContext().getRealPath("")+"/WEB-INF/img/"+f.getPicture_path();  //图片上传路径
@@ -78,16 +103,16 @@ public class ClothController {
         public Status update(@RequestPart("picture_path") Part picture,Cloth f,BindingResult bindingResult,HttpServletRequest request){
                 Status s = new Status();
                 if(picture.getSubmittedFileName()!=null) {
-                        f.setPicture_path("/img/" + picture.getSubmittedFileName());
                         try {
-                                String upload_path = request.getSession().getServletContext().getRealPath("") + "WEB-INF\\img\\" + picture.getSubmittedFileName();
+                                f.setPicture_path(""+System.currentTimeMillis()+".jpg");
+                                String upload_path=request.getSession().getServletContext().getRealPath("")+"/WEB-INF/img/"+f.getPicture_path();  //图片上传路径
+                                f.setPicture_path("/img/"+f.getPicture_path());
                                 picture.write(upload_path);
                         } catch (IOException e) {
                                 s.setstatus(400);
                                 s.setMsg("上传失败");
                                 return s;
                         }
-                        f.setPicture_path("/img/" + picture.getSubmittedFileName());
                 }else{
                         f.setPicture_path(null);
                 }
@@ -95,6 +120,7 @@ public class ClothController {
                 s.setstatus(200);
                 return s;
         }
+
         @RequestMapping(value="/cloth/delete_batch",method = RequestMethod.POST)
         @ResponseBody
         @RequiresPermissions({"cloth:delete"})

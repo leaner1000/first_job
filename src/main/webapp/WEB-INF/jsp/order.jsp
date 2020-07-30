@@ -2,7 +2,7 @@
 
 <table class="easyui-datagrid" id="orderList" title="列表"
        singleSelect="false" collapsible="true" pagination="true" rownumbers="true"
-       url="/order/page" method="post" pageSize="10" fitColumns="true" toolbar="#toolbarorder">
+       url="/order/page" method="post" pageSize="50" fitColumns="true" toolbar="#toolbarorder">
     <thead>
     <tr>
         <th checkbox="true" field="ck"></th>
@@ -38,6 +38,10 @@
     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyorder()">撤销</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="editorder()">编辑</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true" onclick="printorder()">打印</a>
+    <form id="orderconditionForm">
+        客户名:<input name="customer_name" class="easyui-combobox" style="width:150px" id="order_customer" >
+        <a class="easyui-linkbutton" iconCls="icon-search" onclick="order_custom()">统计</a>
+    </form>
     <div id="search_order" style="float: right;">
         <input id="search_text_order" class="easyui-searchbox"
                data-options="searcher:doSearch_order_id,prompt:'请输入...',menu:'#menu_order'"
@@ -59,7 +63,25 @@
 </div>
 
 <script>
-
+    $(function (){
+        $("#order_customer").combobox({
+            mode:'remote',
+            url:'customer/autocomplete',
+            method:'get',
+            textField:"customer_name",
+            valueField:"customer_name",
+        })
+    });
+    function order_custom() {
+        var form=$("#orderconditionForm").serialize();
+        $.get("/custom_name",form,function(data){
+            if(data!=''){
+                $("#orderList").datagrid("loadData",data)
+            }else{
+                $("#orderList").datagrid("loadData",{"total":0,"rows":[]})
+            }
+        })
+    }
     function formatstatus(val,row){
         if(val=='complete'){
             return '<span style="color: green" >已完成</span>'
@@ -104,16 +126,19 @@
     });
 
     function doSearch_order_id(value,name){
+        console.log(value,name)
         if(value==null||value==''){
             $("#orderList").datagrid("reload");
         }else{
-            $.get("/order/"+value,'',function(data){
-                if(data!=''){
-                    $("#orderList").datagrid("loadData",{"total":1,"rows":[data]})
-                }else{
-                    $("#orderList").datagrid("loadData",{"total":0,"rows":[]})
-                }
-            })
+            if(name=='order_id'){
+                $.get("/order/"+value,'',function(data){
+                    if(data!=''){
+                        $("#orderList").datagrid("loadData",{"total":1,"rows":[data]})
+                    }else{
+                        $("#orderList").datagrid("loadData",{"total":0,"rows":[]})
+                    }
+                })
+            }
         }
     }
 

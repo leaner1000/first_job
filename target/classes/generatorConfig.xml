@@ -12,7 +12,7 @@
         <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/my_first_job" userId="root"
-                        password="landxiang!">
+                        password="landxiang">
         </jdbcConnection>
         <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer true，把JDBC DECIMAL 和
             NUMERIC 类型解析为java.math.BigDecimal -->
@@ -34,9 +34,10 @@
         <javaClientGenerator type="XMLMAPPER"
                              targetPackage="com.javan.dao" targetProject="src\main\java">
             <property name="enableSubPackages" value="true" />
+
         </javaClientGenerator>
         <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-        <table schema="dispatch" tableName="sys_role" domainObjectName="SystemRole">
+        <table tableName="special_price" domainObjectName="Cloth">
             <property name="useActualColumnNames" value="true" />
         </table>
     </context>

@@ -21,37 +21,48 @@
     </thead>
     <thead>
         <tr>
-            <th colspan="2">s</th>
-            <th colspan="2">m</th>
-            <th colspan="2">l</th>
-            <th colspan="2">xl</th>
-            <th colspan="2">2xl</th>
-            <th colspan="2">3xl</th>
-            <th colspan="2">4xl</th>
-            <th colspan="2">5xl</th>
-            <th colspan="2">其他</th>
-            <th rowspan="2" field="amount">总件数</th>
+            <%--<th colspan="2">s</th>--%>
+            <%--<th colspan="2">m</th>--%>
+            <%--<th colspan="2">l</th>--%>
+            <%--<th colspan="2">xl</th>--%>
+            <%--<th colspan="2">2xl</th>--%>
+            <%--<th colspan="2">3xl</th>--%>
+            <%--<th colspan="2">4xl</th>--%>
+            <%--<th colspan="2">5xl</th>--%>
+            <%--<th colspan="2">其他</th>--%>
+            <%--<th rowspan="2" field="amount" formatter="formatred">总件数</th>--%>
+            <%--<th rowspan="2" field="total">总金额</th>--%>
+            <th colspan="1">s</th>
+            <th colspan="1">m</th>
+            <th colspan="1">l</th>
+            <th colspan="1">xl</th>
+            <th colspan="1">2xl</th>
+            <th colspan="1">3xl</th>
+            <th colspan="1">4xl</th>
+            <th colspan="1">5xl</th>
+            <th colspan="1">其他</th>
+            <th rowspan="2" field="amount" formatter="formatred">总件数</th>
             <th rowspan="2" field="total">总金额</th>
         </tr>
         <tr>
             <th  field="samount" width="60" align="center">数量</th>
-            <th  field="stotal" width="60" align="center">金额</th>
+            <%--<th  field="stotal" width="60" align="center">金额</th>--%>
             <th  field="mamount" width="60" align="center">数量</th>
-            <th  field="mtotal" width="60" align="center">金额</th>
+            <%--<th  field="mtotal" width="60" align="center">金额</th>--%>
             <th  field="lamount" width="60" align="center">数量</th>
-            <th  field="ltotal" width="60" align="center">金额</th>
+            <%--<th  field="ltotal" width="60" align="center">金额</th>--%>
             <th  field="xlamount" width="60" align="center">数量</th>
-            <th  field="xltotal" width="60" align="center">金额</th>
+            <%--<th  field="xltotal" width="60" align="center">金额</th>--%>
             <th  field="xl2amount" width="60" align="center">数量</th>
-            <th  field="xl2total" width="60" align="center">金额</th>
+            <%--<th  field="xl2total" width="60" align="center">金额</th>--%>
             <th  field="xl3amount" width="60" align="center">数量</th>
-            <th  field="xl3total" width="60" align="center">金额</th>
+            <%--<th  field="xl3total" width="60" align="center">金额</th>--%>
             <th  field="xl4amount" width="60" align="center">数量</th>
-            <th  field="xl4total" width="60" align="center">金额</th>
+            <%--<th  field="xl4total" width="60" align="center">金额</th>--%>
             <th  field="xl5amount" width="60" align="center">数量</th>
-            <th  field="xl5total" width="60" align="center">金额</th>
+            <%--<th  field="xl5total" width="60" align="center">金额</th>--%>
             <th  field="otheramount" width="60" align="center">数量</th>
-            <th  field="othertotal" width="60" align="center">金额</th>
+            <%--<th  field="othertotal" width="60" align="center">金额</th>--%>
         </tr>
     </thead>
 </table>

@@ -2,7 +2,7 @@
 
 <table class="easyui-datagrid" id="clothList" title="列表"
        singleSelect="true" collapsible="true" pagination="true" rownumbers="true"
-       url="/cloth/page" method="post" pageSize="10" fitColumns="true" toolbar="#toolbarcloth">
+       url="/cloth/page" method="post" pageSize="50" fitColumns="true" toolbar="#toolbarcloth">
     <thead>
     <tr>
         <th checkbox="true" field="ck"></th>
@@ -42,6 +42,9 @@
         <th field="others" data-options="width:150">
             其他
         </th>
+        <th field="default_price" data-options="width:150">
+            默认价格
+        </th>
     </tr>
     </thead>
 </table>
@@ -75,7 +78,7 @@
     $("#clothList").datagrid({
         view: detailview,
         detailFormatter:function(index,row){
-            return '<div style="padding:2px" id="cloth'+index+'"><table class="ddv"></table></div>';
+            return '<div style="padding:2px" id="cloth'+index+'" ><table class="ddv"></table></div>';
         },
         onExpandRow: function(index,row){
             var ddv = $(this).datagrid('getRowDetail',index).find('table.ddv');

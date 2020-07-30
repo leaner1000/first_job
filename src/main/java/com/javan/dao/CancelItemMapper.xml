@@ -308,7 +308,7 @@
       and date between #{startTime} and #{endTime}
     </if>
     <if test="customer_cancel!=null and customer_cancel!=''">
-      and cancel_id in (${customer_cancel})
+      and cancelitem_id in (${customer_cancel})
     </if>
   </select>
 
@@ -319,7 +319,7 @@
       and date between #{startTime} and #{endTime}
     </if>
     <if test="customer_cancel!=null and customer_cancel!=''">
-      and cancel_id in (${customer_cancel})
+      and cancelitem_id  in (${customer_cancel})
     </if>
     group by cloth_id
   </select>

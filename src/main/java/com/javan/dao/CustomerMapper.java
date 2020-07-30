@@ -2,6 +2,8 @@ package com.javan.dao;
 
 import com.javan.entity.Customer;
 import com.javan.entity.CustomerExample;
+
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,5 +30,5 @@ public interface CustomerMapper {
 
     int updateByPrimaryKey(Customer record);
 
-    List<Customer> autoComplete(String name);
+    List<Customer> autoComplete(@Param("name")String name);
 }

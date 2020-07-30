@@ -8,6 +8,8 @@ public interface OrderService {
 
     public Order getByid(int id);
 
+    public EUDataGridResult getByCustomer_name(String custom_name);
+
     public String insert(Order f);
 
     public String updata(Order f);

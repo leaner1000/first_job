@@ -6,6 +6,8 @@
     <result column="customer_name" property="customer_name" jdbcType="VARCHAR" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="phone_number" property="phone_number" jdbcType="VARCHAR" />
+    <result column="unused1" property="unused1" jdbcType="INTEGER" />
+    <result column="unused2" property="unused2" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    customer_id, customer_name, address, phone_number
+    customer_id, customer_name, address, phone_number, unused1, unused2
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.javan.entity.CustomerExample" >
     select
@@ -100,9 +102,11 @@
   </delete>
   <insert id="insert" parameterType="com.javan.entity.Customer" >
     insert into customerinfo (customer_id, customer_name, address, 
-      phone_number)
+      phone_number, unused1, unused2
+      )
     values (#{customer_id,jdbcType=INTEGER}, #{customer_name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{phone_number,jdbcType=VARCHAR})
+      #{phone_number,jdbcType=VARCHAR}, #{unused1,jdbcType=INTEGER}, #{unused2,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.javan.entity.Customer" >
     insert into customerinfo
@@ -119,6 +123,12 @@
       <if test="phone_number != null" >
         phone_number,
       </if>
+      <if test="unused1 != null" >
+        unused1,
+      </if>
+      <if test="unused2 != null" >
+        unused2,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="customer_id != null" >
@@ -132,6 +142,12 @@
       </if>
       <if test="phone_number != null" >
         #{phone_number,jdbcType=VARCHAR},
+      </if>
+      <if test="unused1 != null" >
+        #{unused1,jdbcType=INTEGER},
+      </if>
+      <if test="unused2 != null" >
+        #{unused2,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -156,6 +172,12 @@
       <if test="record.phone_number != null" >
         phone_number = #{record.phone_number,jdbcType=VARCHAR},
       </if>
+      <if test="record.unused1 != null" >
+        unused1 = #{record.unused1,jdbcType=INTEGER},
+      </if>
+      <if test="record.unused2 != null" >
+        unused2 = #{record.unused2,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -166,7 +188,9 @@
     set customer_id = #{record.customer_id,jdbcType=INTEGER},
       customer_name = #{record.customer_name,jdbcType=VARCHAR},
       address = #{record.address,jdbcType=VARCHAR},
-      phone_number = #{record.phone_number,jdbcType=VARCHAR}
+      phone_number = #{record.phone_number,jdbcType=VARCHAR},
+      unused1 = #{record.unused1,jdbcType=INTEGER},
+      unused2 = #{record.unused2,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -183,6 +207,12 @@
       <if test="phone_number != null" >
         phone_number = #{phone_number,jdbcType=VARCHAR},
       </if>
+      <if test="unused1 != null" >
+        unused1 = #{unused1,jdbcType=INTEGER},
+      </if>
+      <if test="unused2 != null" >
+        unused2 = #{unused2,jdbcType=VARCHAR},
+      </if>
     </set>
     where customer_id = #{customer_id,jdbcType=INTEGER}
   </update>
@@ -190,7 +220,9 @@
     update customerinfo
     set customer_name = #{customer_name,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
-      phone_number = #{phone_number,jdbcType=VARCHAR}
+      phone_number = #{phone_number,jdbcType=VARCHAR},
+      unused1 = #{unused1,jdbcType=INTEGER},
+      unused2 = #{unused2,jdbcType=VARCHAR}
     where customer_id = #{customer_id,jdbcType=INTEGER}
   </update>
   <select id="autoComplete" parameterType="java.lang.String" resultType="com.javan.entity.Customer">

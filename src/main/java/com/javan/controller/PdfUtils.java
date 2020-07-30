@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class PdfUtils {
 
-    public static void addToMap(Map<String,String> m,Float f){
+    public static void addToMap(Map<String,String> m,Float f){  //将金额按位数存入map
         if(f>0.1){
             m.put("jiao",numToString((int)(f%1/0.1)));
         }
@@ -68,6 +68,7 @@ public class PdfUtils {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         /* 将要生成的目标PDF文件名称 */
         PdfStamper ps = new PdfStamper(reader, bos);
+
         PdfContentByte under = ps.getUnderContent(1);
         /* 使用中文字体 */
         BaseFont bf = BaseFont.createFont(fontName, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
@@ -77,6 +78,7 @@ public class PdfUtils {
         AcroFields fields = ps.getAcroFields();
         fields.setSubstitutionFonts(fontList);
         fillData(fields, data);
+
         /* 必须要调用这个，否则文档不会生成的 */
         ps.setFormFlattening(true);
         ps.close();

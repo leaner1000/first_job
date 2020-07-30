@@ -7,6 +7,7 @@
                 <td>
                     <select class="easyui-combobox" name="role_id" style="width: 200px">
                         <option value="1">系统管理员</option>
+                        <option value="2">店员</option>
                     </select>
                 </td>
             </tr>

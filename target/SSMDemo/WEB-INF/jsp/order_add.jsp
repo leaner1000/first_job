@@ -52,10 +52,15 @@
 </div>
 <script>
     function bindorderenterevent(){
-        for(i=0;i<$("#orderAddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").length;i++){
-            $($("#orderAddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")).keydown(function(e){
+        var input_list=$("#orderAddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")
+        for(i=0;i<input_list.length;i++){
+            $(input_list).keydown(function(e){
                     if(e.which==13){
-                        $($("#orderAddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)")[$("#orderAddForm").find("input[id^='_easyui_textbox_input'],.datagrid-editable-input:not(.combo-f)").index(e.target)+1]).focus()
+                        $(input_list[input_list.index(e.target)+1]).focus()
+                    }
+                    if(e.which==106){
+                        $(input_list[input_list.index(e.target)-1]).focus()
+                        return false;
                     }
                 }
             )
@@ -76,7 +81,30 @@
         $("#orderitemList").datagrid({
             high:"auto",
             columns:[[
-                {field:'cloth_id',title:"货号",editor:{type:'text',options:{required:true}},width:50},
+                {field:'cloth_id',title:"货号",editor:{type:'combobox',options:{required:true, mode:'remote',url:'cloth/autocomplete',valueField:'cloth_id',textField:'cloth_id',method:'get',onSelect:function(record){
+                                console.log(record)
+                                var row = $('#orderitemList').datagrid('getSelected');
+                                var rowIndex = $('#orderitemList').datagrid('getRowIndex',row);//获取行号
+
+                                $.ajax({
+                                    type:"POST",
+                                    url:"cloth/default_price",
+                                    data:JSON.stringify({cloth_id:record.cloth_id,custom_name:$("#ordercombobox").combobox('getValues')[0]}),
+                                    processData: false,  // 不处理数据
+                                    contentType: "application/json",   // 不设置内容类型
+                                    success:function(data){
+                                        var editors =$('#orderitemList').datagrid("getEditors",rowIndex);
+                                        console.log(data)
+                                        console.log(editors)
+                                        if(data.status==200){
+                                            $(editors[11].target).val(data.msg)
+                                        }else{
+                                            $(editors[11].target).val(record.price)
+                                        }
+                                    }
+                                })
+                                $('.combo-panel').hide()
+                            }}},width:50},
                 {field:"color",title:"颜色",editor:{type:'text',options:{required:true}},width:50},
 
                 {field:"s",title:"S",editor:{type:'text'},width:25},
