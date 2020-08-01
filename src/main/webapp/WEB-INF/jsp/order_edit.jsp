@@ -83,7 +83,7 @@
         $("#orderitemeditList").datagrid({
             high:"auto",
             columns:[[
-                {field:'cloth_id',title:"货号",editor:{type:'text',options:{required:true}},width:50},
+                {field:'cloth_id',title:"货号",editor:{type:'combobox',options:{ mode:'remote',url:'cloth/autocomplete',valueField:'cloth_id',textField:'cloth_id',method:'get'}},width:50},
                 {field:"color",title:"颜色",editor:{type:'text',options:{required:true}},width:50},
 
                 {field:"s",title:"S",editor:{type:'text'},width:25},
@@ -97,16 +97,16 @@
                 {field:"other",title:"其他",editor:{type:'text'},width:25},
                 {field:"num",title:"总数",formatter:function(value,row,index){
                         row.num= (isNaN(parseInt(row.s))?0:parseInt(row.s))+
-                        (isNaN(parseInt(row.m))?0:parseInt(row.m))+
-                        (isNaN(parseInt(row.l))?0:parseInt(row.l))+
+                            (isNaN(parseInt(row.m))?0:parseInt(row.m))+
+                            (isNaN(parseInt(row.l))?0:parseInt(row.l))+
                             (isNaN(parseInt(row.xl))?0:parseInt(row.xl))+
-                        (isNaN(parseInt(row.xl2))?0:parseInt(row.xl2))+
-                        (isNaN(parseInt(row.xl3))?0:parseInt(row.xl3))+
-                        (isNaN(parseInt(row.xl4))?0:parseInt(row.xl4))+
-                        (isNaN(parseInt(row.xl5))?0:parseInt(row.xl5))+
-                        (isNaN(parseInt(row.other))?0:parseInt(row.other));
+                            (isNaN(parseInt(row.xl2))?0:parseInt(row.xl2))+
+                            (isNaN(parseInt(row.xl3))?0:parseInt(row.xl3))+
+                            (isNaN(parseInt(row.xl4))?0:parseInt(row.xl4))+
+                            (isNaN(parseInt(row.xl5))?0:parseInt(row.xl5))+
+                            (isNaN(parseInt(row.other))?0:parseInt(row.other));
                         return row.num;
-                }},
+                    }},
                 {field:"single",title:"单价",editor:{type:'text',options:{required:true,precision:1}},width:50},
                 {field:'total',title:"总价",formatter:function(value,row,index){
                         row.total=row.s*row.single+row.m*row.single+row.l*row.single+row.xl*row.single+row.xl2*row.single+row.xl3*row.single+row.xl4*row.single+row.xl5*row.single+row.other*row.single;
@@ -117,13 +117,27 @@
             ]],
             onSelect:function (rowIndex, rowData) {
                 $("#orderitemeditList").datagrid('beginEdit',rowIndex);
-                bindorderenterevent();
-            },
-            onLoadSuccess:function () {
+                var editors =$("#orderitemeditList").datagrid("getEditors",rowIndex);
+                editors[0].target.combobox({
+                    onSelect: function (record) {
+                        console.log(record)
+                        $.ajax({
+                            type: "GET",
+                            url: "cloth/default_price?cloth_id=" + record.cloth_id + "&custom_name=" + $("#ordercombobox").combobox('getValues')[0],
+                            processData: false,  // 不处理数据
+                            success: function (data) {
+                                if (data.status == 200) {
+                                    $(editors[11].target).val(data.msg)
+                                } else {
+                                    $(editors[11].target).val(record.default_price)
+                                }
+                            }
+                        })
+                    }
+                })
                 bindorderenterevent();
             }
         });
-
         $(".combo").click(function(){
             $(this).prev().combobox("showPanel");
         })

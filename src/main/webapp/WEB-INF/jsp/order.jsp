@@ -38,6 +38,7 @@
     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyorder()">撤销</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="editorder()">编辑</a>
     <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true" onclick="printorder()">打印</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true" onclick="confirmpay()">确认支付</a>
     <form id="orderconditionForm">
         客户名:<input name="customer_name" class="easyui-combobox" style="width:150px" id="order_customer" >
         <a class="easyui-linkbutton" iconCls="icon-search" onclick="order_custom()">统计</a>
@@ -84,9 +85,11 @@
     }
     function formatstatus(val,row){
         if(val=='complete'){
-            return '<span style="color: green" >已完成</span>'
-        }else{
+            return '<span style="color: yellowgreen" >未支付</span>'
+        }if(val=='cancel'){
             return '<span style="color: red" >已撤销</span>'
+        }if(val=='payed'){
+            return '<span style="color: green" >已支付</span>'
         }
     }
     $("#orderList").datagrid({
@@ -226,9 +229,8 @@
                         }
                         for(i in l){
                             $("#orderitemeditList").datagrid('appendRow',l[i]);
-                            $("#orderitemeditList").datagrid('beginEdit',i);
-                        }
 
+                        }
                     }
                 })
             }
@@ -268,6 +270,31 @@
             }
         });
     }
+
+    function confirmpay(){
+        var ids = getorderSelectionsIds();
+        console.log(ids)
+        var param={"ids":ids}
+        console.log(param)
+        if(ids.length == 0){
+            $.messager.alert('提示','未选中记录!');
+            return ;
+        }
+        $.messager.confirm('确认','确定将ID为 '+ids+' 的记录修改为已支付吗？',function(r){
+            if (r){
+                $.post("/complete_order",param, function(data){
+                    if(data.status == 200){
+                        $.messager.alert('提示','状态修改成功!',undefined,function(){
+                            $("#orderList").datagrid("reload");
+                        });
+                    }else{
+                        $.messager.alert('提示',data.msg);
+                    }
+                });
+            }
+        });
+    }
+
     function printorder(){
         var ids = getorderSelectionsIds();
         if(ids.length == 0){

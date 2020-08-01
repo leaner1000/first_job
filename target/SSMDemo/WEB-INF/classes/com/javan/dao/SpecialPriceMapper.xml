@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.javan.dao.SpecialPriceMapper" >
+  <resultMap id="BaseResultMap" type="com.javan.entity.SpecialPrice" >
+    <id column="cloth_id" property="cloth_id" jdbcType="INTEGER" />
+    <id column="custom_id" property="custom_id" jdbcType="VARCHAR" />
+    <result column="default_price" property="default_price" jdbcType="DECIMAL" />
+    <result column="unused1" property="unused1" jdbcType="VARCHAR" />
+    <result column="unused2" property="unused2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    cloth_id, custom_id, default_price, unused1, unused2
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.javan.entity.SpecialPriceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from special_price
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.javan.entity.SpecialPriceKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from special_price
+    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+      and custom_id = #{custom_id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.javan.entity.SpecialPriceKey" >
+    delete from special_price
+    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+      and custom_id = #{custom_id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.javan.entity.SpecialPriceExample" >
+    delete from special_price
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.javan.entity.SpecialPrice" >
+    insert into special_price (cloth_id, custom_id, default_price, 
+      unused1, unused2)
+    values (#{cloth_id,jdbcType=INTEGER}, #{custom_id,jdbcType=VARCHAR}, #{default_price,jdbcType=DECIMAL}, 
+      #{unused1,jdbcType=VARCHAR}, #{unused2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.javan.entity.SpecialPrice" >
+    insert into special_price
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cloth_id != null" >
+        cloth_id,
+      </if>
+      <if test="custom_id != null" >
+        custom_id,
+      </if>
+      <if test="default_price != null" >
+        default_price,
+      </if>
+      <if test="unused1 != null" >
+        unused1,
+      </if>
+      <if test="unused2 != null" >
+        unused2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cloth_id != null" >
+        #{cloth_id,jdbcType=INTEGER},
+      </if>
+      <if test="custom_id != null" >
+        #{custom_id,jdbcType=VARCHAR},
+      </if>
+      <if test="default_price != null" >
+        #{default_price,jdbcType=DECIMAL},
+      </if>
+      <if test="unused1 != null" >
+        #{unused1,jdbcType=VARCHAR},
+      </if>
+      <if test="unused2 != null" >
+        #{unused2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.javan.entity.SpecialPriceExample" resultType="java.lang.Integer" >
+    select count(*) from special_price
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update special_price
+    <set >
+      <if test="record.cloth_id != null" >
+        cloth_id = #{record.cloth_id,jdbcType=INTEGER},
+      </if>
+      <if test="record.custom_id != null" >
+        custom_id = #{record.custom_id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.default_price != null" >
+        default_price = #{record.default_price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.unused1 != null" >
+        unused1 = #{record.unused1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unused2 != null" >
+        unused2 = #{record.unused2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update special_price
+    set cloth_id = #{record.cloth_id,jdbcType=INTEGER},
+      custom_id = #{record.custom_id,jdbcType=VARCHAR},
+      default_price = #{record.default_price,jdbcType=DECIMAL},
+      unused1 = #{record.unused1,jdbcType=VARCHAR},
+      unused2 = #{record.unused2,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.javan.entity.SpecialPrice" >
+    update special_price
+    <set >
+      <if test="default_price != null" >
+        default_price = #{default_price,jdbcType=DECIMAL},
+      </if>
+      <if test="unused1 != null" >
+        unused1 = #{unused1,jdbcType=VARCHAR},
+      </if>
+      <if test="unused2 != null" >
+        unused2 = #{unused2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+      and custom_id = #{custom_id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.javan.entity.SpecialPrice" >
+    update special_price
+    set default_price = #{default_price,jdbcType=DECIMAL},
+      unused1 = #{unused1,jdbcType=VARCHAR},
+      unused2 = #{unused2,jdbcType=VARCHAR}
+    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+      and custom_id = #{custom_id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -48,9 +48,9 @@ public class ClothController {
                 return cm.autoComplete(q);
         }
 
-        @RequestMapping(value = "/cloth/default_price",method = RequestMethod.POST)
+        @RequestMapping(value = "/cloth/default_price",method = RequestMethod.GET)
         @ResponseBody
-        public Status getDefaultPrice(@Param("cloth_id")int cloth_id,@Param("customer_name")String custom_name){
+        public Status getDefaultPrice(@Param("cloth_id")Integer cloth_id,@Param("customer_name")String custom_name){
             SpecialPriceKey spk = new SpecialPriceKey();
             spk.setCloth_id(cloth_id);
             spk.setCustom_id(custom_name);

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.javan.dao.ClothMapper" >
+  <resultMap id="BaseResultMap" type="com.javan.entity.Cloth" >
+    <id column="cloth_id" property="cloth_id" jdbcType="INTEGER" />
+    <result column="picture_path" property="picture_path" jdbcType="VARCHAR" />
+    <result column="des" property="des" jdbcType="VARCHAR" />
+    <result column="s" property="s" jdbcType="INTEGER" />
+    <result column="m" property="m" jdbcType="INTEGER" />
+    <result column="l" property="l" jdbcType="INTEGER" />
+    <result column="xl" property="xl" jdbcType="INTEGER" />
+    <result column="xl2" property="xl2" jdbcType="INTEGER" />
+    <result column="xl3" property="xl3" jdbcType="INTEGER" />
+    <result column="xl4" property="xl4" jdbcType="INTEGER" />
+    <result column="xl5" property="xl5" jdbcType="INTEGER" />
+    <result column="others" property="others" jdbcType="INTEGER" />
+    <result column="default_price" property="default_price" jdbcType="DECIMAL" />
+    <result column="unused1" property="unused1" jdbcType="VARCHAR" />
+    <result column="unused2" property="unused2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    cloth_id, picture_path, des, s, m, l, xl, xl2, xl3, xl4, xl5, others, default_price, 
+    unused1, unused2
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.javan.entity.ClothExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from clothinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from clothinfo
+    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from clothinfo
+    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.javan.entity.ClothExample" >
+    delete from clothinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.javan.entity.Cloth" >
+    insert into clothinfo (cloth_id, picture_path, des, 
+      s, m, l, xl, 
+      xl2, xl3, xl4, xl5, 
+      others, default_price, unused1, 
+      unused2)
+    values (#{cloth_id,jdbcType=INTEGER}, #{picture_path,jdbcType=VARCHAR}, #{des,jdbcType=VARCHAR}, 
+      #{s,jdbcType=INTEGER}, #{m,jdbcType=INTEGER}, #{l,jdbcType=INTEGER}, #{xl,jdbcType=INTEGER}, 
+      #{xl2,jdbcType=INTEGER}, #{xl3,jdbcType=INTEGER}, #{xl4,jdbcType=INTEGER}, #{xl5,jdbcType=INTEGER}, 
+      #{others,jdbcType=INTEGER}, #{default_price,jdbcType=DECIMAL}, #{unused1,jdbcType=VARCHAR}, 
+      #{unused2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.javan.entity.Cloth" >
+    insert into clothinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cloth_id != null" >
+        cloth_id,
+      </if>
+      <if test="picture_path != null" >
+        picture_path,
+      </if>
+      <if test="des != null" >
+        des,
+      </if>
+      <if test="s != null" >
+        s,
+      </if>
+      <if test="m != null" >
+        m,
+      </if>
+      <if test="l != null" >
+        l,
+      </if>
+      <if test="xl != null" >
+        xl,
+      </if>
+      <if test="xl2 != null" >
+        xl2,
+      </if>
+      <if test="xl3 != null" >
+        xl3,
+      </if>
+      <if test="xl4 != null" >
+        xl4,
+      </if>
+      <if test="xl5 != null" >
+        xl5,
+      </if>
+      <if test="others != null" >
+        others,
+      </if>
+      <if test="default_price != null" >
+        default_price,
+      </if>
+      <if test="unused1 != null" >
+        unused1,
+      </if>
+      <if test="unused2 != null" >
+        unused2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cloth_id != null" >
+        #{cloth_id,jdbcType=INTEGER},
+      </if>
+      <if test="picture_path != null" >
+        #{picture_path,jdbcType=VARCHAR},
+      </if>
+      <if test="des != null" >
+        #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="s != null" >
+        #{s,jdbcType=INTEGER},
+      </if>
+      <if test="m != null" >
+        #{m,jdbcType=INTEGER},
+      </if>
+      <if test="l != null" >
+        #{l,jdbcType=INTEGER},
+      </if>
+      <if test="xl != null" >
+        #{xl,jdbcType=INTEGER},
+      </if>
+      <if test="xl2 != null" >
+        #{xl2,jdbcType=INTEGER},
+      </if>
+      <if test="xl3 != null" >
+        #{xl3,jdbcType=INTEGER},
+      </if>
+      <if test="xl4 != null" >
+        #{xl4,jdbcType=INTEGER},
+      </if>
+      <if test="xl5 != null" >
+        #{xl5,jdbcType=INTEGER},
+      </if>
+      <if test="others != null" >
+        #{others,jdbcType=INTEGER},
+      </if>
+      <if test="default_price != null" >
+        #{default_price,jdbcType=DECIMAL},
+      </if>
+      <if test="unused1 != null" >
+        #{unused1,jdbcType=VARCHAR},
+      </if>
+      <if test="unused2 != null" >
+        #{unused2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.javan.entity.ClothExample" resultType="java.lang.Integer" >
+    select count(*) from clothinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update clothinfo
+    <set >
+      <if test="record.cloth_id != null" >
+        cloth_id = #{record.cloth_id,jdbcType=INTEGER},
+      </if>
+      <if test="record.picture_path != null" >
+        picture_path = #{record.picture_path,jdbcType=VARCHAR},
+      </if>
+      <if test="record.des != null" >
+        des = #{record.des,jdbcType=VARCHAR},
+      </if>
+      <if test="record.s != null" >
+        s = #{record.s,jdbcType=INTEGER},
+      </if>
+      <if test="record.m != null" >
+        m = #{record.m,jdbcType=INTEGER},
+      </if>
+      <if test="record.l != null" >
+        l = #{record.l,jdbcType=INTEGER},
+      </if>
+      <if test="record.xl != null" >
+        xl = #{record.xl,jdbcType=INTEGER},
+      </if>
+      <if test="record.xl2 != null" >
+        xl2 = #{record.xl2,jdbcType=INTEGER},
+      </if>
+      <if test="record.xl3 != null" >
+        xl3 = #{record.xl3,jdbcType=INTEGER},
+      </if>
+      <if test="record.xl4 != null" >
+        xl4 = #{record.xl4,jdbcType=INTEGER},
+      </if>
+      <if test="record.xl5 != null" >
+        xl5 = #{record.xl5,jdbcType=INTEGER},
+      </if>
+      <if test="record.others != null" >
+        others = #{record.others,jdbcType=INTEGER},
+      </if>
+      <if test="record.default_price != null" >
+        default_price = #{record.default_price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.unused1 != null" >
+        unused1 = #{record.unused1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unused2 != null" >
+        unused2 = #{record.unused2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update clothinfo
+    set cloth_id = #{record.cloth_id,jdbcType=INTEGER},
+      picture_path = #{record.picture_path,jdbcType=VARCHAR},
+      des = #{record.des,jdbcType=VARCHAR},
+      s = #{record.s,jdbcType=INTEGER},
+      m = #{record.m,jdbcType=INTEGER},
+      l = #{record.l,jdbcType=INTEGER},
+      xl = #{record.xl,jdbcType=INTEGER},
+      xl2 = #{record.xl2,jdbcType=INTEGER},
+      xl3 = #{record.xl3,jdbcType=INTEGER},
+      xl4 = #{record.xl4,jdbcType=INTEGER},
+      xl5 = #{record.xl5,jdbcType=INTEGER},
+      others = #{record.others,jdbcType=INTEGER},
+      default_price = #{record.default_price,jdbcType=DECIMAL},
+      unused1 = #{record.unused1,jdbcType=VARCHAR},
+      unused2 = #{record.unused2,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.javan.entity.Cloth" >
+    update clothinfo
+    <set >
+      <if test="picture_path != null" >
+        picture_path = #{picture_path,jdbcType=VARCHAR},
+      </if>
+      <if test="des != null" >
+        des = #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="s != null" >
+        s = #{s,jdbcType=INTEGER},
+      </if>
+      <if test="m != null" >
+        m = #{m,jdbcType=INTEGER},
+      </if>
+      <if test="l != null" >
+        l = #{l,jdbcType=INTEGER},
+      </if>
+      <if test="xl != null" >
+        xl = #{xl,jdbcType=INTEGER},
+      </if>
+      <if test="xl2 != null" >
+        xl2 = #{xl2,jdbcType=INTEGER},
+      </if>
+      <if test="xl3 != null" >
+        xl3 = #{xl3,jdbcType=INTEGER},
+      </if>
+      <if test="xl4 != null" >
+        xl4 = #{xl4,jdbcType=INTEGER},
+      </if>
+      <if test="xl5 != null" >
+        xl5 = #{xl5,jdbcType=INTEGER},
+      </if>
+      <if test="others != null" >
+        others = #{others,jdbcType=INTEGER},
+      </if>
+      <if test="default_price != null" >
+        default_price = #{default_price,jdbcType=DECIMAL},
+      </if>
+      <if test="unused1 != null" >
+        unused1 = #{unused1,jdbcType=VARCHAR},
+      </if>
+      <if test="unused2 != null" >
+        unused2 = #{unused2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.javan.entity.Cloth" >
+    update clothinfo
+    set picture_path = #{picture_path,jdbcType=VARCHAR},
+      des = #{des,jdbcType=VARCHAR},
+      s = #{s,jdbcType=INTEGER},
+      m = #{m,jdbcType=INTEGER},
+      l = #{l,jdbcType=INTEGER},
+      xl = #{xl,jdbcType=INTEGER},
+      xl2 = #{xl2,jdbcType=INTEGER},
+      xl3 = #{xl3,jdbcType=INTEGER},
+      xl4 = #{xl4,jdbcType=INTEGER},
+      xl5 = #{xl5,jdbcType=INTEGER},
+      others = #{others,jdbcType=INTEGER},
+      default_price = #{default_price,jdbcType=DECIMAL},
+      unused1 = #{unused1,jdbcType=VARCHAR},
+      unused2 = #{unused2,jdbcType=VARCHAR}
+    where cloth_id = #{cloth_id,jdbcType=INTEGER}
+  </update>
+  <select id="autoComplete" parameterType="java.lang.String" resultType="com.javan.entity.Cloth">
+    select * from clothinfo
+    where cloth_id like #{id,jdbcType=VARCHAR}"%"
+  </select>
+</mapper>
